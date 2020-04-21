@@ -8,6 +8,8 @@ class DownloadMediaController extends Controller
 {
     public function show(Media $media)
     {
+        $this->authorize('view', $media);
+        
         return $media;
     }
 }
