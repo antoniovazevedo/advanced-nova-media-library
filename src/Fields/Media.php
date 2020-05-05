@@ -230,12 +230,12 @@ class Media extends Field
             $collectionName = call_user_func($this->computedCallback, $resource);
         }
 
-        $this->value = $resource->getMedia($collectionName)
+        $this->value = method_exists($resource, 'getMedia') ? $resource->getMedia($collectionName)
             ->map(function (\Spatie\MediaLibrary\MediaCollections\Models\Media $media) {
                 return array_merge($this->serializeMedia($media), ['__media_urls__' => $this->getConversionUrls($media)]);
-            });
+            }) : null;
 
-        if ($collectionName) {
+        if ($collectionName && $resource instanceof HasMedia) {
             $this->checkCollectionIsMultiple($resource, $collectionName);
         }
     }
